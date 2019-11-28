@@ -1,0 +1,23 @@
+{
+  "name": "containers-logger",
+  "version": "1.0.0",
+  "description": "A docker containers logging tool",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/server/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/roikramer120/containers-logger.git"
+  },
+  "author": "Roi Kramer",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/roikramer120/containers-logger/issues"
+  },
+  "homepage": "https://github.com/roikramer120/containers-logger#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
