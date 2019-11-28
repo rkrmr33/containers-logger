@@ -5,8 +5,9 @@
 docker info
 ```
 
-2. start the app server by running:
+2. start the app server by running inside the cloned directory:
 ```
+cd containers-logger
 docker-compose -d
 ```
 
