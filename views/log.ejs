@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <meta charset="UTF-8">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" />
+      <link rel="stylesheet" href="/log.css" />
+      <title>Container Logger</title>
+  </head>
+  <body style="margin: 30px;">
+    <div class="ui grid">
+        <div class="four wide column"></div>
+        <div class="eight wide column">
+            <h1>Container: </h1>
+            <% let id = container.Id.substring(0, 12); %>
+            <table width="50%" class="ui left aligned selectable celled striped table">
+                <thead>
+                    <tr>
+                        <th class="center aligned">Id</th>
+                        <th class="center aligned">Image</th>
+                        <th class="center aligned">State</th>
+                        <th class="center aligned">Names</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><%- id -%></td>
+                        <td><%- container.Image -%></td>
+                        <td><%- container.State -%></td>
+                        <td><%- container.Names.join(', ') -%></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="four wide column"></div>
+    </div>
+
+    <div class="ui grid">
+        <div class="one wide column"></div>
+        <div class="fourteen wide column">
+            <table width="50%" class="ui fixed selectable celled striped table scrollable-table">
+                <thead>
+                    <tr>
+                        <th class="center aligned time-logged">Time logged</th>
+                        <th class="center aligned source">Source</th>
+                        <th class="center aligned log">Log</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="collapsing center aligned time-logged"><%- new Date().toUTCString() -%></td>
+                        <td class="center aligned source">stdout</td>
+                        <td class="log" style="word-wrap: break-word;"><%- container.Id + container.Id + container.Id -%></td>
+                    </tr>
+                    <tr>
+                        <td class="collapsing center aligned time-logged"><%- new Date().toUTCString() -%></td>
+                        <td class="center aligned source">stdout</td>
+                        <td class="log" style="word-wrap: break-word;"><%- container.Id + container.Id + container.Id -%></td>
+                    </tr>
+                    <tr>
+                        <td class="collapsing center aligned time-logged"><%- new Date().toUTCString() -%></td>
+                        <td class="center aligned source">stdout</td>
+                        <td class="log" style="word-wrap: break-word;"><%- container.Id + container.Id + container.Id -%></td>
+                    </tr>
+                    <tr>
+                        <td class="collapsing center aligned time-logged"><%- new Date().toUTCString() -%></td>
+                        <td class="center aligned source">stdout</td>
+                        <td class="log" style="word-wrap: break-word;"><%- container.Id + container.Id + container.Id -%></td>
+                    </tr>
+                    <tr>
+                        <td class="collapsing center aligned time-logged"><%- new Date().toUTCString() -%></td>
+                        <td class="center aligned source">stdout</td>
+                        <td class="log" style="word-wrap: break-word;"><%- container.Id + container.Id + container.Id -%></td>
+                    </tr>
+                    <tr>
+                        <td class="collapsing center aligned time-logged"><%- new Date().toUTCString() -%></td>
+                        <td class="center aligned source">stdout</td>
+                        <td class="log" style="word-wrap: break-word;"><%- container.Id + container.Id + container.Id -%></td>
+                    </tr>
+                    <tr>
+                            <td class="collapsing center aligned time-logged"><%- new Date().toUTCString() -%></td>
+                            <td class="center aligned source">stdout</td>
+                            <td class="log" style="word-wrap: break-word;"><%- container.Id + container.Id + container.Id -%></td>
+                    </tr>
+                    <tr>
+                            <td class="collapsing center aligned time-logged"><%- new Date().toUTCString() -%></td>
+                            <td class="center aligned source">stdout</td>
+                            <td class="log" style="word-wrap: break-word;"><%- container.Id + container.Id + container.Id -%></td>
+                    </tr>
+
+                    
+                </tbody>
+            </table>
+        </div>
+        <div class="one wide column"></div>
+    </div>
+
+    <script type="text/javascript" src="/index.js"></script>
+  </body>
+</html>

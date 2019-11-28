@@ -4,7 +4,6 @@
       <meta charset="UTF-8">
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" />
       <title>Container Logger</title>
-
   </head>
   <body style="margin: 30px;">
     <div class="ui grid">
@@ -24,20 +23,23 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <% let i = 0; containers.forEach(container => { %>
-                        <%- "<tr>" +
-                                "<td class=\"center aligned\">" + (++i) + "</td>" +
-                                "<td>" + container.Id.substring(0, 12) + "</td>" +
-                                "<td>" + container.Image + "</td>" +
-                                "<td>" + container.State + "</td>" +
-                                "<td>" + container.Status + "</td>" +
-                                "<td>" + container.Names.join(', ') + "</td>" +
-                                "<td class=\"collapsing\"> " +
-                                    "<div class=\"ui fitted slider checkbox\">" +
-                                    "<input type=\"checkbox\"> <label></label>" +
-                                    "</div>" +
-                                "</td>" +
-                            "</tr>" -%>
+                    <% let i = 0; containers.forEach(container => {
+                            let id = container.Id.substring(0, 12); %>
+                        <tr>
+                            <td class="center aligned"><%- ++i -%></td>
+                            <td id="<%- id -%>"><%- id -%></td>
+                            <td><%- container.Image -%></td>
+                            <td><%- container.State -%></td>
+                            <td><%- container.Status -%></td>
+                            <td><%- container.Names.join(', ') -%></td>
+                            <td class="collapsing">
+                                <div class="ui fitted slider checkbox">
+                                <input type="checkbox" onclick="loggingClicked(this, '<%- id -%>')">
+                                    <label></label>
+                                </div>
+                            </td>
+                        </tr>
+                        
                     <% }); %>
                 </tbody>
                 <tfoot class="full-width">
@@ -50,5 +52,7 @@
         </div>
         <div class="two wide column"></div>
     </div>
+
+    <script type="text/javascript" src="/index.js"></script>
   </body>
 </html>

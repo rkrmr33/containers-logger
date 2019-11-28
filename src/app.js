@@ -1,10 +1,8 @@
 'use strict';
 
 const express = require('express');
-const Docker = require('dockerode');
 
-const docker = new Docker({ socketPath: '/var/run/docker.sock' });
-
+const util = require('./util');
 const conf = require('./config');
 
 const server = express();
@@ -13,9 +11,17 @@ server.use(express.static('static'));
 server.set('view engine', 'ejs');
 
 server.get('/', (req, res) => {
-    docker.listContainers({ all: true })
+    util.getAllContainers()
         .then(containers => {
             res.render('index', { containers });
+        });
+});
+
+server.get('/container/:id', (req, res) => {
+    util.getContainer(req.params.id)
+        .then(container => {
+            // console.log(container);
+            res.render('log', { container });
         });
 });
 
