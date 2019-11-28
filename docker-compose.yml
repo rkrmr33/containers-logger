@@ -1,0 +1,16 @@
+version: "2"
+services:
+  app:
+    container_name: app
+    build: . # use the Dockerfile in the current directory
+    ports: 
+      - "8888:8888"
+    depends_on:
+      - mongo
+  mongo:
+    container_name: mongodb
+    image: mongo
+    volumes: 
+      - "./data:/data/db" # map persistent storage
+    ports:
+      - "27017:27017"

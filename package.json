@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/roikramer120/containers-logger#readme",
   "dependencies": {
+    "dockerode": "^3.0.2",
     "express": "^4.17.1"
   }
 }

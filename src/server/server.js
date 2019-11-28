@@ -10,6 +10,6 @@ server.get('/', (req, res) => {
     res.send('hello, world!\n');
 });
 
-server.listen(PORT, HOST);
-
-console.log(`[+] server running on: ${HOST}:${PORT}`);
+server.listen(PORT, HOST, () => {
+    console.log(`[+] server running on: ${HOST}:${PORT}`);
+});
