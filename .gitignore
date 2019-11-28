@@ -1,5 +1,6 @@
 # mongodb directory
-data/
+data/*
+!*.md
 
 # Logs
 logs
