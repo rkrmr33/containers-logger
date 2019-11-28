@@ -2,9 +2,9 @@
   "name": "containers-logger",
   "version": "1.0.0",
   "description": "A docker containers logging tool",
-  "main": "index.js",
+  "main": "src/app/app.js",
   "scripts": {
-    "start": "node src/server/server.js",
+    "start": "node src/app/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

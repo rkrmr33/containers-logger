@@ -17,5 +17,5 @@ docker-compose -d
 
 5. to stop the application run:
 ```
-docker-compose stop
+docker-compose down
 ```
