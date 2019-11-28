@@ -5,6 +5,7 @@ services:
     build: . # use the Dockerfile in the current directory
     volumes:
       - ".:/usr/src/app"
+      - "/var/run:/var/run"
     ports: 
       - "8888:8888"
     depends_on:

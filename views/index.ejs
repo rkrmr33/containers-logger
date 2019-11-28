@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <meta charset="UTF-8">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" />
+      <title>Container Logger</title>
+
+  </head>
+  <body style="margin: 30px;">
+    <div class="ui grid">
+        <div class="two wide column"></div>
+        <div class="twelve wide column">
+            <h1>Containers: </h1>
+            <table width="50%" class="ui left aligned selectable celled striped table">
+                <thead>
+                    <tr>
+                        <th class="center aligned">No.</th>
+                        <th class="center aligned">Id</th>
+                        <th class="center aligned">Image</th>
+                        <th class="center aligned">State</th>
+                        <th class="center aligned">Status</th>
+                        <th class="center aligned">Names</th>
+                        <th class="center aligned">Logging?</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% let i = 0; containers.forEach(container => { %>
+                        <%- "<tr>" +
+                                "<td class=\"center aligned\">" + (++i) + "</td>" +
+                                "<td>" + container.Id.substring(0, 12) + "</td>" +
+                                "<td>" + container.Image + "</td>" +
+                                "<td>" + container.State + "</td>" +
+                                "<td>" + container.Status + "</td>" +
+                                "<td>" + container.Names.join(', ') + "</td>" +
+                                "<td class=\"collapsing\"> " +
+                                    "<div class=\"ui fitted slider checkbox\">" +
+                                    "<input type=\"checkbox\"> <label></label>" +
+                                    "</div>" +
+                                "</td>" +
+                            "</tr>" -%>
+                    <% }); %>
+                </tbody>
+                <tfoot class="full-width">
+                    <tr>
+                    <th colspan="7">
+                    </th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        <div class="two wide column"></div>
+    </div>
+  </body>
+</html>

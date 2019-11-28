@@ -2,9 +2,9 @@
   "name": "containers-logger",
   "version": "1.0.0",
   "description": "A docker containers logging tool",
-  "main": "src/app/app.js",
+  "main": "src/app.js",
   "scripts": {
-    "start": "node src/app/app.js",
+    "start": "node $npm_package_main",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -19,6 +19,8 @@
   "homepage": "https://github.com/roikramer120/containers-logger#readme",
   "dependencies": {
     "dockerode": "^3.0.2",
-    "express": "^4.17.1"
+    "ejs": "^3.0.1",
+    "express": "^4.17.1",
+    "mongoose": "^5.7.12"
   }
 }

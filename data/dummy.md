@@ -1,0 +1,1 @@
+this directory is used by mongodb inside the container
