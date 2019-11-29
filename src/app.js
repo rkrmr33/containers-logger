@@ -1,13 +1,14 @@
 'use strict';
-
 const express = require('express');
 
 const util = require('./util');
 const conf = require('./config');
+const apiRouter = require('./api');
 
 const server = express();
 
-server.use(express.static('static'));
+server.use(express.static('public'));
+server.use(apiRouter);
 server.set('view engine', 'ejs');
 
 // main page
