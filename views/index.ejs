@@ -6,10 +6,72 @@
       <title>Container Logger</title>
   </head>
   <body style="margin: 30px;">
+        <h1 class="ui center aligned icon header">
+            <i class="docker icon"></i>
+            Containers:
+        </h1>
+
     <div class="ui grid">
         <div class="two wide column"></div>
         <div class="twelve wide column">
-            <h1>Containers: </h1>
+            <div class="ui grid">
+                <div class="three wide column"></div>
+                <div class="ten wide column">
+                    <div class="ui center aligned statistics">
+                        <div class="statistic">
+                            <div class="value">
+                                <%- containers.filter(container => container.State == 'running').length -%>
+                            </div>
+                            <div class="label">
+                                Running
+                            </div>
+                        </div>
+                        <div class="statistic">
+                            <div class="value">
+                                <%- containers.filter(container => container.State == 'exited').length -%>
+                            </div>
+                            <div class="label">
+                                Exited
+                            </div>
+                        </div>
+                        <div class="statistic">
+                            <div class="value">
+                                <%- containers.filter(container => container.State == 'paused').length -%>
+                            </div>
+                            <div class="label">
+                                Paused
+                            </div>
+                        </div>
+                        <div class="statistic">
+                            <div class="value">
+                                <%- containers.filter(container => container.State == 'restarting').length -%>
+                            </div>
+                            <div class="label">
+                                Restarting
+                            </div>
+                        </div>
+                        <div class="statistic">
+                            <div class="value">
+                                <%- containers.filter(container => container.State == 'created').length -%>
+                            </div>
+                            <div class="label">
+                                Created
+                            </div>
+                        </div>
+                        <div class="statistic">
+                            <div class="value">
+                                <%- containers.filter(container => container.State == 'dead').length -%>
+                            </div>
+                            <div class="label">
+                                Dead
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="three wide column">
+                    
+                </div>
+            </div>
             <table width="50%" class="ui left aligned selectable celled striped table">
                 <thead>
                     <tr>
