@@ -1,10 +1,16 @@
 'use strict';
 
 let dataStream = undefined;
+let counter = 0;
+let scrollTarget = undefined;
 
 window.onload = function () {
+    scrollTarget = document.getElementById('scrollTarget');
     const containerId = document.getElementById('containerId').innerText;
     const isLogging = document.getElementById('loggingIndicator');
+    counter = document.getElementById('counter').innerHTML;
+
+    scrollDown(scrollTarget);
 
     // listen for changes
     isLogging.addEventListener('click', e => {
@@ -17,7 +23,6 @@ window.onload = function () {
 
     // check if need to connect to stream
     if (isLogging.checked) {
-        console.log("reareraeraer");
         startLogging(containerId);
     }
 }
@@ -26,7 +31,6 @@ function startLogging(id) {
     const logTable = document.getElementById('logTable');
     dataStream = new EventSource(`/api/container/${id}/logs`);
     
-    dataStream.onopen = e => console.log('connected to stream');
     dataStream.onerror = e => {
         console.log(e);
         dataStream.close();
@@ -35,13 +39,15 @@ function startLogging(id) {
     dataStream.addEventListener(id, event => {
         const log = JSON.parse(event.data);
 
-        logTable.innerHTML = 
+        logTable.innerHTML += 
             '<tr>' +
-                '<td class="number">' + log.number + '</td>' +
+                '<td class="number">' + (++counter) + '</td>' +
                 '<td class="time-logged">' + log.timeLogged + '</td>' +
                 '<td class="source">' + log.source + '</td>' +
                 '<td class="left aligned log">' + log.log + '</td>' +
-            '</tr>' + logTable.innerHTML;
+            '</tr>';
+
+        scrollDown(scrollTarget);
     });
 }
 
@@ -49,5 +55,11 @@ function stopLogging() {
     if (dataStream) {
         dataStream.close();
         dataStream = undefined;
+    }
+}
+
+function scrollDown(scrollTarget) {
+    if (scrollTarget) {
+        scrollTarget.scrollIntoView({ behavior: 'smooth' });
     }
 }

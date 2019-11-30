@@ -3,7 +3,12 @@ const mongoose = require('mongoose');
 
 const conf = require('../config');
 
-mongoose.connect(conf.DB_CONN_STR, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(conf.DB_CONN_STR, { 
+    connectTimeoutMS:1000, 
+    useNewUrlParser: true, 
+    useUnifiedTopology: true,
+    useCreateIndex: true
+    })
     .then(() => {
         console.log('[+] connected to db'); // TODO: remove
     })
@@ -13,7 +18,7 @@ mongoose.connect(conf.DB_CONN_STR, { useNewUrlParser: true, useUnifiedTopology: 
 
 // Log model
 const logSchema = new mongoose.Schema({
-    containerId: { type: String },
+    containerId: { type: String, index: true },
     timeLogged:  { type: Date, default: Date.now },
     source:      { type: String },
     log:         { type: String }
@@ -23,12 +28,13 @@ const Log = mongoose.model('Log', logSchema);
 module.exports.newLog = (log) => {
     const logModel = new Log({
         containerId: log.containerId,
-        timeLogged: log.timeLogged,
         source: log.source,
         log: log.log
     });
 
-    return logModel.save();
+    console.log('reached');
+
+    return logModel.save({ wtimeout: 1000 });
 };
 
 module.exports.getContainer = (id) => {
@@ -36,5 +42,13 @@ module.exports.getContainer = (id) => {
 }
 
 module.exports.getLogs = (containerId) => {
-    return Log.find({ containerId });
-}
+    return new Promise((resolve, reject) => {
+        console.log('reached');
+        Log.find({ containerId }).wtimeout(1000).exec((err, data) => {
+            if (err) {
+                reject(err);
+            }
+            resolve(data);
+        });
+    });
+};

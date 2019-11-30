@@ -5,6 +5,8 @@ const util = require('./util');
 const conf = require('./config');
 const apiRouter = require('./api');
 
+const storage = require('./storage/mongo_storage');
+
 const server = express();
 
 // middleware
@@ -23,14 +25,24 @@ server.get('/', (req, res) => {
 
 // container page
 server.get('/container/:id', (req, res) => {
-    util.getContainer(req.params.id)
-        .then(container => {
-            // console.log(container);
-            res.render('log', { container });
+    util.getContainerAndLogs(req.params.id)
+        .then((args) => {
+            const container = args.container;
+            const logs = args.logs;
+            if (!container) {
+                res.redirect('/404');
+            }
+
+            res.render('log', { container, logs });
         })
         .catch(exception => {
-            res.render('')
+            console.log(exception);
+            res.redirect('/404');
         });
+});
+
+server.get('/404', (req, res) => {
+    res.render('404');
 });
 
 server.listen(conf.PORT, conf.HOST, () => {

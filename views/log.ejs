@@ -55,28 +55,33 @@
                     </tr>
                 </thead>
             </table>
-            <div class="scrollable-table">
+            <div id="scrollDiv" class="scrollable-table">
                 <table class="ui center aligned selectable celled striped table" style="margin-top:0px; border-top: none">
                 <tbody id="logTable">
-                    <tr>
-                        <td class="number">1</td>
-                        <td class="time-logged"><%- new Date().toUTCString() -%></td>
-                        <td class="source">stdout</td>
-                        <td class="left aligned log">
-                                asf;lka ads  asjd  asdkjasdk jlaj sdlj saldkjl askdj laskjdlaksjd
-                                asf;lka ads  asjd  asdkjasdk jlaj sdlj saldkjl askdj laskjdlaksjd
-                                asf;lka ads  asjd  asdkjasdk jlaj sdlj saldkjl askdj laskjdlaksjd
-                                asf;lka ads  asjd  asdkjasdk jlaj sdlj saldkjl askdj laskjdlaksjd
-                                asf;lka ads  asjd  asdkjasdk jlaj sdlj saldkjl askdj laskjdlaksjd
-                                
-                        </td>
-                    </tr>
+                    <% let i = 1;
+                        if (logs && logs.length > 0) {
+                        logs.forEach(log => { %>
+                        <tr>
+                            <td class="number"><%- i++ -%></td>
+                            <td class="time-logged"><%- new Date(log.timeLogged).toUTCString() -%></td>
+                            <td class="source"><%- log.source -%></td>
+                            <td class="left aligned log">
+                                    <%- log.log -%>
+                            </td>
+                        </tr>
+                    <%    })
+                        } %>
                 </tbody>
             </table>
+            <div style="float:left; clear:both" id="scrollTarget"></div>
             </div>
         </div>
         <div class="one wide column"></div>
     </div>
+
+    <%# this is read by the 'log.js' script to determine 
+        the number of the last log entry  %>
+    <p id="counter" style="display: none;"><%- logs.length || 0 -%></p>
 
     <script type="text/javascript" src="/index.js"></script>
     <script type="text/javascript" src="/log.js"></script>

@@ -50,28 +50,11 @@ router.delete('/api/container/:id/logs', (req, res) => {
 });
 
 const handleStdout = (log) => {
-    log = log.toString().trim();
-
-    if (log !== '') {
-        console.log(`[stdout]: ${log}`);
-    }
+    logsEmitter.emit(log.containerId, log);
 }
 
 const handleStderr = (log) => {
-    log = log.toString().trim();
-
-    if (log !== '') {
-        console.log(`[stderr]: ${log}`);
-    }
+    logsEmitter.emit(log.containerId, log);
 }
-
-// const Log = require('./models/log');
-
-// for (let i = 1; i < 100; ++i) {
-//     setTimeout(() => {
-//         console.log('emitting: 8288100fdb18');
-//         logsEmitter.emit('8288100fdb18', new Log(1, 1231231, new Date().toUTCString(), 'stdout', 'hello world'));
-//     }, 1000 * i);
-// }
 
 module.exports = router;

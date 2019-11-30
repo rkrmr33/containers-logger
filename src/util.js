@@ -1,7 +1,9 @@
 'use strict';
 const Docker = require('dockerode');
-const storage = require('./storage/mongo_storage');
 const streams = require('stream');
+
+const storage = require('./storage/mongo_storage');
+const Log = require('./models/log');
 
 const docker = new Docker({ socketPath: '/var/run/docker.sock' });
 
@@ -11,9 +13,7 @@ const shortId = (id) => id.substring(0, 12);
 
 module.exports.getAllContainers = () => {
     return docker.listContainers({ all: true })
-        .then(containers => {
-            return containers.map(container => {
-                console.log(container);
+        .then(containers => containers.map(container => {
                 return {
                     id: container.Id,
                     image: container.Image,
@@ -22,8 +22,8 @@ module.exports.getAllContainers = () => {
                     names: container.Names,
                     logging: attachedContainers.has(shortId(container.Id))
                 };
-            });
-        })
+            })
+        )
 }
 
 module.exports.getContainer = (id) => {
@@ -42,22 +42,37 @@ module.exports.getContainer = (id) => {
     });
 };
 
+const processLog = (containerId, source, data, cb) => {
+    data = data.toString().trim();
+
+    if (data !== '') {
+        const log = new Log(containerId, null, source, data);
+        storage.newLog(log)
+            .then(doc => {
+                cb(doc);
+            })
+            .catch(exception => {
+                console.log('[-] could not store to db: ' + exception);
+            });
+    }
+}
+
 module.exports.attachToContainer = (id, stdoutCB, stderrCB) => {
     const container = docker.getContainer(id);
     
     container.attach({ stream: true, stdout: true, stderr: true })
     .then(stream => {
         const outStream = new streams.PassThrough();
-        outStream.on('data', stdoutCB);
+        outStream.on('data', data => processLog(id, 'stdout', data, stdoutCB));
 
         const errStream = new streams.PassThrough();
-        errStream.on('data', stderrCB);
+        errStream.on('data', data => processLog(id, 'stderr', data, stderrCB));
 
         container.modem.demuxStream(stream, outStream, errStream);
 
         stream.on('end', () => {
-            outStream.end('');
-            errStream.end('');
+            outStream.end();
+            errStream.end();
         });
 
         console.log('attached to container');
@@ -78,3 +93,11 @@ module.exports.detachFromContainer = (id) => {
     }
 };
 
+module.exports.getContainerAndLogs = (id) => {
+    return this.getContainer(id)
+        .then(container => storage.getLogs(id)
+            .then(logs => { 
+                return { container, logs };
+            })
+        );
+};
