@@ -1,10 +1,30 @@
-.scrollable-table tbody {
-    display: block;
+.scrollable-table {
     overflow-y: auto;
     max-height: 400px;
 }
 
-.scrollable-table tbody tr {
-    word-break: break-all;
+.scrollable-table table tbody {
+    
+   
 }
 
+.scrollable-table table tbody tr {
+    display: table-row;
+}
+
+.number {
+    width: 3.7%;
+}
+
+.time-logged {
+    width: 19.3%;
+}
+
+.source {
+    width: 6%;
+}
+
+.log {
+    overflow-x: hidden;
+    width: 80%;
+}

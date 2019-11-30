@@ -7,8 +7,10 @@ const apiRouter = require('./api');
 
 const server = express();
 
+// middleware
 server.use(express.static('public'));
 server.use(apiRouter);
+
 server.set('view engine', 'ejs');
 
 // main page

@@ -11,22 +11,30 @@
         <div class="four wide column"></div>
         <div class="eight wide column">
             <h1>Container: </h1>
-            <% let id = container.Id.substring(0, 12); %>
-            <table width="50%" class="ui left aligned selectable celled striped table">
+            <% let id = container.id.substring(0, 12); %>
+            <table width="50%" class="ui center aligned selectable celled striped table">
                 <thead>
                     <tr>
-                        <th class="center aligned">Id</th>
-                        <th class="center aligned">Image</th>
-                        <th class="center aligned">State</th>
-                        <th class="center aligned">Names</th>
+                        <th>Id</th>
+                        <th>Image</th>
+                        <th>State</th>
+                        <th>Names</th>
+                        <th>Logging</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td><%- id -%></td>
-                        <td><%- container.Image -%></td>
-                        <td><%- container.State -%></td>
-                        <td><%- container.Names.join(', ') -%></td>
+                        <td id="containerId"><%- id -%></td>
+                        <td><%- container.image -%></td>
+                        <td><%- container.state -%></td>
+                        <td><%- container.names.join(', ') -%></td>
+                        <td class="collapsing">
+                            <div class="ui fitted slider checkbox">
+                            <input id="loggingIndicator" <%- container.logging ? 'checked' : '' -%> 
+                                type="checkbox" onclick="loggingClicked(this, '<%- id -%>')">
+                                <label></label>
+                            </div>
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -37,72 +45,40 @@
     <div class="ui grid">
         <div class="one wide column"></div>
         <div class="fourteen wide column">
-            <table class="ui selectable celled striped table" style="margin-bottom: 0; border-bottom: none;">
+            <table class="ui center aligned selectable celled striped table" style="margin-bottom: 0; border-bottom: none;">
                 <thead>
                     <tr>
-                        <th class="center aligned" style="width: 3.7%;">No.</th>
-                        <th class="center aligned" style="width: 19%;">Time logged</th>
-                        <th class="center aligned" style="width: 6%;">Source</th>
-                        <th class="center aligned" style="width: 70%;">Log</th>
+                        <th style="width: 3.7%;">No.</th>
+                        <th style="width: 19%;">Time logged</th>
+                        <th style="width: 6%;">Source</th>
+                        <th style="width: 70%;">Log</th>
                     </tr>
                 </thead>
             </table>
-            <table class="ui selectable celled striped table scrollable-table" style="margin-top:0px; border-top: none">
-                <tbody>
+            <div class="scrollable-table">
+                <table class="ui center aligned selectable celled striped table" style="margin-top:0px; border-top: none">
+                <tbody id="logTable">
                     <tr>
-                        <td style="width: 3.7%;" class="center aligned number">1</td>
-                        <td style="width: 19%;" class="center aligned time-logged"><%- new Date().toUTCString() -%></td>
-                        <td style="width: 6%;" class="center aligned source">stdout</td>
-                        <td style="width: 70%;" class="log" style="word-wrap: break-word;"><%- container.Id + container.Id + container.Id -%></td>
-                    </tr>
-                    <tr>
-                        <td style="width: 3.7%;" class="center aligned number">1</td>
-                        <td style="width: 19%;" class="center aligned time-logged"><%- new Date().toUTCString() -%></td>
-                        <td style="width: 6%;" class="center aligned source">stdout</td>
-                        <td style="width: 70%;" class="log" style="word-wrap: break-word;"><%- container.Id + container.Id + container.Id -%></td>
-                    </tr>
-                    <tr>
-                        <td style="width: 3.7%;" class="center aligned number">1</td>
-                        <td style="width: 19%;" class="center aligned time-logged"><%- new Date().toUTCString() -%></td>
-                        <td style="width: 6%;" class="center aligned source">stdout</td>
-                        <td style="width: 70%;" class="log" style="word-wrap: break-word;"><%- container.Id + container.Id + container.Id -%></td>
-                    </tr>
-                    <tr>
-                        <td style="width: 3.7%;" class="center aligned number">1</td>
-                        <td style="width: 19%;" class="center aligned time-logged"><%- new Date().toUTCString() -%></td>
-                        <td style="width: 6%;" class="center aligned source">stdout</td>
-                        <td style="width: 70%;" class="log" style="word-wrap: break-word;"><%- container.Id + container.Id + container.Id -%></td>
-                    </tr>
-                    <tr>
-                        <td style="width: 3.7%;" class="center aligned number">1</td>
-                        <td style="width: 19%;" class="center aligned time-logged"><%- new Date().toUTCString() -%></td>
-                        <td style="width: 6%;" class="center aligned source">stdout</td>
-                        <td style="width: 70%;" class="log" style="word-wrap: break-word;"><%- container.Id + container.Id + container.Id -%></td>
-                    </tr>
-                    <tr>
-                        <td style="width: 3.7%;" class="center aligned number">1</td>
-                        <td style="width: 19%;" class="center aligned time-logged"><%- new Date().toUTCString() -%></td>
-                        <td style="width: 6%;" class="center aligned source">stdout</td>
-                        <td style="width: 70%;" class="log" style="word-wrap: break-word;"><%- container.Id + container.Id + container.Id -%></td>
-                    </tr>
-                    <tr>
-                        <td style="width: 3.7%;" class="center aligned number">1</td>
-                        <td style="width: 19%;" class="center aligned time-logged"><%- new Date().toUTCString() -%></td>
-                        <td style="width: 6%;" class="center aligned source">stdout</td>
-                        <td style="width: 70%;" class="log" style="word-wrap: break-word;"><%- container.Id + container.Id + container.Id -%></td>
-                    </tr>
-                    <tr>
-                        <td style="width: 3.7%;" class="center aligned number">1</td>
-                        <td style="width: 19%;" class="center aligned time-logged"><%- new Date().toUTCString() -%></td>
-                        <td style="width: 6%;" class="center aligned source">stdout</td>
-                        <td style="width: 70%;" class="log" style="word-wrap: break-word;"><%- container.Id + container.Id + container.Id -%></td>
+                        <td class="number">1</td>
+                        <td class="time-logged"><%- new Date().toUTCString() -%></td>
+                        <td class="source">stdout</td>
+                        <td class="left aligned log">
+                                asf;lka ads  asjd  asdkjasdk jlaj sdlj saldkjl askdj laskjdlaksjd
+                                asf;lka ads  asjd  asdkjasdk jlaj sdlj saldkjl askdj laskjdlaksjd
+                                asf;lka ads  asjd  asdkjasdk jlaj sdlj saldkjl askdj laskjdlaksjd
+                                asf;lka ads  asjd  asdkjasdk jlaj sdlj saldkjl askdj laskjdlaksjd
+                                asf;lka ads  asjd  asdkjasdk jlaj sdlj saldkjl askdj laskjdlaksjd
+                                
+                        </td>
                     </tr>
                 </tbody>
             </table>
+            </div>
         </div>
         <div class="one wide column"></div>
     </div>
 
     <script type="text/javascript" src="/index.js"></script>
+    <script type="text/javascript" src="/log.js"></script>
   </body>
 </html>

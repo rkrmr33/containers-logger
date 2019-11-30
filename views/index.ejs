@@ -15,12 +15,12 @@
         <div class="two wide column"></div>
         <div class="twelve wide column">
             <div class="ui grid">
-                <div class="three wide column"></div>
-                <div class="ten wide column">
-                    <div class="ui center aligned statistics">
+                <div class="two wide column"></div>
+                <div class="twelve wide column">
+                    <div style="margin-left: auto; margin-right: auto;" class="ui statistics">
                         <div class="statistic">
                             <div class="value">
-                                <%- containers.filter(container => container.State == 'running').length -%>
+                                <%- containers.filter(container => container.state == 'running').length -%>
                             </div>
                             <div class="label">
                                 Running
@@ -28,7 +28,7 @@
                         </div>
                         <div class="statistic">
                             <div class="value">
-                                <%- containers.filter(container => container.State == 'exited').length -%>
+                                <%- containers.filter(container => container.state == 'exited').length -%>
                             </div>
                             <div class="label">
                                 Exited
@@ -36,7 +36,7 @@
                         </div>
                         <div class="statistic">
                             <div class="value">
-                                <%- containers.filter(container => container.State == 'paused').length -%>
+                                <%- containers.filter(container => container.state == 'paused').length -%>
                             </div>
                             <div class="label">
                                 Paused
@@ -44,7 +44,7 @@
                         </div>
                         <div class="statistic">
                             <div class="value">
-                                <%- containers.filter(container => container.State == 'restarting').length -%>
+                                <%- containers.filter(container => container.state == 'restarting').length -%>
                             </div>
                             <div class="label">
                                 Restarting
@@ -52,7 +52,7 @@
                         </div>
                         <div class="statistic">
                             <div class="value">
-                                <%- containers.filter(container => container.State == 'created').length -%>
+                                <%- containers.filter(container => container.state == 'created').length -%>
                             </div>
                             <div class="label">
                                 Created
@@ -60,15 +60,23 @@
                         </div>
                         <div class="statistic">
                             <div class="value">
-                                <%- containers.filter(container => container.State == 'dead').length -%>
+                                <%- containers.filter(container => container.state == 'dead').length -%>
                             </div>
                             <div class="label">
                                 Dead
                             </div>
                         </div>
+                        <div class="statistic">
+                            <div class="value">
+                                <%- containers.length -%>
+                            </div>
+                            <div class="label">
+                                Total
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="three wide column">
+                <div class="two wide column">
                     
                 </div>
             </div>
@@ -86,17 +94,23 @@
                 </thead>
                 <tbody>
                     <% let i = 0; containers.forEach(container => {
-                            let id = container.Id.substring(0, 12); %>
+                            let id = container.id.substring(0, 12); %>
                         <tr>
                             <td class="center aligned"><%- ++i -%></td>
-                            <td id="<%- id -%>"><%- id -%></td>
-                            <td><%- container.Image -%></td>
-                            <td><%- container.State -%></td>
-                            <td><%- container.Status -%></td>
-                            <td><%- container.Names.join(', ') -%></td>
+                            <td><a href="/container/<%- id -%>"><%- id -%></a></td>
+                            <td>
+                                <%- container.image.length > 20 ?
+                                    container.image.substring(0, 20) + '...' :
+                                    container.image;
+                                     -%>
+                            </td>
+                            <td><%- container.state -%></td>
+                            <td><%- container.status -%></td>
+                            <td><%- container.names.join(', ') -%></td>
                             <td class="collapsing">
                                 <div class="ui fitted slider checkbox">
-                                <input type="checkbox" onclick="loggingClicked(this, '<%- id -%>')">
+                                <input <%- container.logging ? 'checked' : '' -%> 
+                                    type="checkbox" onclick="loggingClicked(this, '<%- id -%>')">
                                     <label></label>
                                 </div>
                             </td>
