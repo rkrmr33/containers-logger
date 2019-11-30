@@ -8,6 +8,7 @@ const router = new Router();
 
 const logsEmitter = new EventEmitter();
 
+// connect to live log stream
 router.get('/api/container/:id/logs', (req, res) => {
     const id = req.params.id;
     
@@ -33,8 +34,8 @@ router.post('/api/container/:id/logs', (req, res) => {
         util.attachToContainer(id, handleStdout, handleStderr);
         res.status(200);
     } catch (e) {
-        console.log(e);
-        res.sendStatus(500);
+        console.error(e);
+        res.status(500).send(`could not attach to container: ${id}`);
     }
 });
 
@@ -44,7 +45,7 @@ router.delete('/api/container/:id/logs', (req, res) => {
         util.detachFromContainer(id);
         res.sendStatus(200);
     } catch (e) {
-        console.log(e);
+        console.error(e);
         res.sendStatus(400);
     }
 });

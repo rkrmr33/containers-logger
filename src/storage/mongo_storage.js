@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 
 const conf = require('../config');
 
+// connect to mongo
 mongoose.connect(conf.DB_CONN_STR, { 
     connectTimeoutMS:1000, 
     useNewUrlParser: true, 
@@ -10,10 +11,10 @@ mongoose.connect(conf.DB_CONN_STR, {
     useCreateIndex: true
     })
     .then(() => {
-        console.log('[+] connected to db'); // TODO: remove
+        console.info('[+] connected to db');
     })
     .catch(exception => {
-        console.log(exception);
+        console.error(exception);
     });
 
 // Log model
@@ -32,23 +33,29 @@ module.exports.newLog = (log) => {
         log: log.log
     });
 
-    console.log('reached');
-
-    return logModel.save({ wtimeout: 1000 });
+    return logModel.save();
 };
 
-module.exports.getContainer = (id) => {
-    return Container.findOne({ id });
-}
-
 module.exports.getLogs = (containerId) => {
-    return new Promise((resolve, reject) => {
-        console.log('reached');
-        Log.find({ containerId }).wtimeout(1000).exec((err, data) => {
-            if (err) {
-                reject(err);
+    let promisePending = true;
+    const promise = new Promise((resolve, reject) => {
+        // there is a problem with the mongoose timeout, so that's plan b.
+        setTimeout(() => {
+            if (promisePending) {
+                reject(new Error('db timeout'));
             }
-            resolve(data);
+        }, 3000);
+        
+        Log.find({ containerId }).wtimeout(3000).exec((err, data) => {
+            if (promisePending) {
+                if (err) {
+                    reject(err);
+                }
+                resolve(data);
+                promisePending = false;
+            }
         });
     });
+
+    return promise;
 };

@@ -52,7 +52,7 @@ const processLog = (containerId, source, data, cb) => {
                 cb(doc);
             })
             .catch(exception => {
-                console.log('[-] could not store to db: ' + exception);
+                console.error('[-] could not store to db: ' + exception);
             });
     }
 }
@@ -75,15 +75,11 @@ module.exports.attachToContainer = (id, stdoutCB, stderrCB) => {
             errStream.end();
         });
 
-        console.log('attached to container');
-
         attachedContainers.set(shortId(container.id), stream);
     });
 }
 
 module.exports.detachFromContainer = (id) => {
-    console.log('detached container:' + id);
-
     const stream = attachedContainers.get(id);
     if (!stream) {
         throw new Error('container was not logged before');
