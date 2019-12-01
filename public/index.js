@@ -1,8 +1,6 @@
 'use strict';
 
 const loggingClicked = (e, id) => {
-    const containerIdCell = document.getElementById(id);
-
     const xhr = new XMLHttpRequest();
 
     xhr.onreadystatechange = () => {

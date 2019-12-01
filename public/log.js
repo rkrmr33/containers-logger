@@ -10,7 +10,9 @@ window.onload = function () {
     const isLogging = document.getElementById('loggingIndicator');
     counter = document.getElementById('counter').innerHTML;
 
-    scrollDown(scrollTarget);
+    if (counter >= 6) {
+        scrollDown(scrollTarget);
+    }
 
     // listen for changes
     isLogging.addEventListener('click', e => {
@@ -29,7 +31,7 @@ window.onload = function () {
 
 function startLogging(id) {
     const logTable = document.getElementById('logTable');
-    dataStream = new EventSource(`/api/container/${id}/logs`);
+    dataStream = new EventSource(`/api/container/${id}/logs/stream`);
     
     dataStream.onerror = e => {
         console.log(e);

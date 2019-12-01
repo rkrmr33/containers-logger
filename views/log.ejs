@@ -4,14 +4,17 @@
       <meta charset="UTF-8">
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" />
       <link rel="stylesheet" href="/log.css" />
+      <script src="https://cdn.jsdelivr.net/npm/json2csv"></script>
       <title>Container Logger</title>
   </head>
   <body style="margin: 30px;">
+    <% let id = container.id.substring(0, 12); %>
+    
     <div class="ui grid">
         <div class="four wide column"></div>
         <div class="eight wide column">
             <h1>Container: </h1>
-            <% let id = container.id.substring(0, 12); %>
+            
             <table width="50%" class="ui center aligned selectable celled striped table">
                 <thead>
                     <tr>
@@ -53,6 +56,9 @@
                         <th style="width: 19%;">Time logged</th>
                         <th style="width: 6%;">Source</th>
                         <th style="width: 70%;">Log</th>
+                        <th style="width: 3%;">
+                            <a href="/api/container/<%-id-%>/logs.csv" download="<%-id-%>_logs.csv"><i class="download icon"></i></a>
+                        </th>
                     </tr>
                 </thead>
             </table>
