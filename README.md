@@ -8,7 +8,7 @@ docker info
 2. start the app server by running inside the cloned directory:
 ```
 cd containers-logger
-sudo docker-compose up -d
+sudo docker-compose up -d --build
 ```
 
 3. open your browser and go to: http://localhost:8888/
