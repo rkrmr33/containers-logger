@@ -26,11 +26,12 @@
                     <tr>
                         <td id="containerId"><%- id -%></td>
                         <td><%- container.image -%></td>
-                        <td><%- container.state -%></td>
+                        <td><%- container.state || 'removed' -%></td>
                         <td><%- container.names.join(', ') -%></td>
                         <td class="collapsing">
                             <div class="ui fitted slider checkbox">
-                            <input id="loggingIndicator" <%- container.logging ? 'checked' : '' -%> 
+                            <input id="loggingIndicator" 
+                                <%- container.logging == undefined ? 'disabled' : container.logging ? 'checked' : '' -%> 
                                 type="checkbox" onclick="loggingClicked(this, '<%- id -%>')">
                                 <label></label>
                             </div>

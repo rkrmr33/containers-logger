@@ -29,6 +29,7 @@ server.get('/container/:id', (req, res) => {
     .then((args) => {
         const container = args.container;
         const logs = args.logs;
+        
         if (!container || !logs) {
             res.redirect('/404');
         }

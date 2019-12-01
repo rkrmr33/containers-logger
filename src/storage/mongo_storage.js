@@ -26,6 +26,83 @@ const logSchema = new mongoose.Schema({
 });
 const Log = mongoose.model('Log', logSchema);
 
+// Container model
+const containerSchema = new mongoose.Schema({
+    id: { type: String },
+    image:       { type: String },
+    names:       { type: [String] }
+});
+const Container = mongoose.model('Container', containerSchema);
+
+module.exports.newLoggedContainer = (container) => {
+    const containerModel = new Container({
+        id: container.id,
+        image: container.image,
+        names: container.names
+    });
+
+    const promise = new Promise((resolve, reject) => {
+        setQueryTimeout(reject, 3000);
+
+        // create container doc if does not exist
+        Container.findOne({ id: container.id}, (err, container) => {
+            if (err) {
+                reject(err);
+            }
+
+            if (container) {
+                resolve(container);
+            } else {
+                containerModel.save()
+                .then(result => resolve(result))
+                .catch(exception => reject(exception));
+            }
+        });
+    });
+
+    return promise;
+}
+
+module.exports.getAllContainers = () => {
+    const promise = new Promise((resolve, reject) => {
+        let allContainers = {};
+        setQueryTimeout(reject, 3000);
+
+        Container.find({ }, (err, containers) => {
+            if (err) {
+                reject(err);
+            }
+
+            if (containers) { 
+                containers.forEach(container => {
+                    allContainers[container.id] = container;
+                });
+            }
+            
+            resolve(allContainers);
+        });
+    });
+
+    return promise;
+};
+
+module.exports.getContainer = (id) => {
+    const promise = new Promise((resolve, reject) => {
+        setQueryTimeout(reject, 3000);
+
+        Container.findOne({ id }, (err, container) => {
+
+            if (err) {
+                reject(err);
+            }
+
+            resolve(container);
+        });
+    });
+
+    return promise;
+};
+
 module.exports.newLog = (log) => {
     const logModel = new Log({
         containerId: log.containerId,
@@ -37,25 +114,24 @@ module.exports.newLog = (log) => {
 };
 
 module.exports.getLogs = (containerId) => {
-    let promisePending = true;
     const promise = new Promise((resolve, reject) => {
-        // there is a problem with the mongoose timeout, so that's plan b.
-        setTimeout(() => {
-            if (promisePending) {
-                reject(new Error('db timeout'));
-            }
-        }, 3000);
-        
+        setQueryTimeout(reject, 3000);
+
         Log.find({ containerId }).wtimeout(3000).exec((err, data) => {
-            if (promisePending) {
-                if (err) {
-                    reject(err);
-                }
-                resolve(data);
-                promisePending = false;
+            if (err) {
+                reject(err);
             }
+
+            resolve(data);            
         });
     });
 
     return promise;
+};
+
+// there is a problem with the mongoose timeout, so that's plan b.
+const setQueryTimeout = (reject, timeout) => {
+    setTimeout(() => {
+        reject(new Error('db timeout'));
+    }, timeout);
 };

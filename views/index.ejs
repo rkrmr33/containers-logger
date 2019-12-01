@@ -11,11 +11,13 @@
             Containers:
         </h1>
 
+        <% const keys = Object.keys(containers); %>
+
         <div class="ui center aligned grid">
             <div style="display: inline-block;" class="ui center aligned statistics">
                 <div class="statistic">
                     <div class="value">
-                        <%- containers.filter(container => container.state == 'running').length -%>
+                        <%- keys.filter(containerId => containers[containerId].state == 'running').length -%>
                     </div>
                     <div class="label">
                         Running
@@ -23,7 +25,7 @@
                 </div>
                 <div class="statistic">
                     <div class="value">
-                        <%- containers.filter(container => container.state == 'exited').length -%>
+                        <%- keys.filter(containerId => containers[containerId].state == 'exited').length -%>
                     </div>
                     <div class="label">
                         Exited
@@ -31,7 +33,7 @@
                 </div>
                 <div class="statistic">
                     <div class="value">
-                        <%- containers.filter(container => container.state == 'paused').length -%>
+                        <%- keys.filter(containerId => containers[containerId].state == 'paused').length -%>
                     </div>
                     <div class="label">
                         Paused
@@ -39,7 +41,7 @@
                 </div>
                 <div class="statistic">
                     <div class="value">
-                        <%- containers.filter(container => container.state == 'restarting').length -%>
+                        <%- keys.filter(containerId => containers[containerId].state == 'restarting').length -%>
                     </div>
                     <div class="label">
                         Restarting
@@ -47,7 +49,7 @@
                 </div>
                 <div class="statistic">
                     <div class="value">
-                        <%- containers.filter(container => container.state == 'created').length -%>
+                        <%- keys.filter(containerId => containers[containerId].state == 'created').length -%>
                     </div>
                     <div class="label">
                         Created
@@ -55,7 +57,7 @@
                 </div>
                 <div class="statistic">
                     <div class="value">
-                        <%- containers.filter(container => container.state == 'dead').length -%>
+                        <%- keys.filter(containerId => containers[containerId].state == 'dead').length -%>
                     </div>
                     <div class="label">
                         Dead
@@ -63,7 +65,15 @@
                 </div>
                 <div class="statistic">
                     <div class="value">
-                        <%- containers.length -%>
+                        <%- keys.filter(containerId => containers[containerId].state == undefined).length -%>
+                    </div>
+                    <div class="label">
+                        Removed
+                    </div>
+                </div>
+                <div class="statistic">
+                    <div class="value">
+                        <%- keys.length -%>
                     </div>
                     <div class="label">
                         Total
@@ -90,23 +100,23 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <% let i = 0; containers.forEach(container => {
-                                let id = container.id.substring(0, 12); %>
+                        <% let i = 0; keys.forEach(containerId => {
+                                let id = containerId.substring(0, 12); %>
                             <tr>
                                 <td class="center aligned"><%- ++i -%></td>
                                 <td><a href="/container/<%- id -%>"><%- id -%></a></td>
                                 <td>
-                                    <%- container.image.length > 20 ?
-                                        container.image.substring(0, 30) + '...' :
-                                        container.image;
+                                    <%- containers[containerId].image.length > 20 ?
+                                        containers[containerId].image.substring(0, 30) + '...' :
+                                        containers[containerId].image;
                                         -%>
                                 </td>
-                                <td><%- container.state -%></td>
-                                <td><%- container.status -%></td>
-                                <td><%- container.names.join(', ') -%></td>
+                                <td><%- containers[containerId].state || 'removed' -%></td>
+                                <td><%- containers[containerId].status || 'removed' -%></td>
+                                <td><%- containers[containerId].names.join(', ') -%></td>
                                 <td class="collapsing">
                                     <div class="ui fitted slider checkbox">
-                                    <input <%- container.logging ? 'checked' : '' -%> 
+                                    <input <%- containers[containerId].logging == undefined ? 'disabled' : containers[containerId].logging ? 'checked' : '' -%> 
                                         type="checkbox" onclick="loggingClicked(this, '<%- id -%>')">
                                         <label></label>
                                     </div>

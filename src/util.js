@@ -12,18 +12,32 @@ const attachedContainers = new Map();
 const shortId = (id) => id.substring(0, 12);
 
 module.exports.getAllContainers = () => {
-    return docker.listContainers({ all: true })
-        .then(containers => containers.map(container => {
-                return {
-                    id: container.Id,
-                    image: container.Image,
-                    state: container.State,
-                    status: container.Status,
-                    names: container.Names,
-                    logging: attachedContainers.has(shortId(container.Id))
-                };
+    return storage.getAllContainers()
+        .then(storedContainers => docker.listContainers({ all: true })
+            .then(liveContainers => {
+                let allContainers = storedContainers;
+                
+                liveContainers.forEach(container => {
+                    const id = shortId(container.Id);
+                    allContainers[id] = {
+                            id: id,
+                            image: container.Image,
+                            state: container.State,
+                            status: container.Status,
+                            names: container.Names,
+                            logging: attachedContainers.has(id)
+                        };
+                });
+                
+                return allContainers;
+            })
+            .catch(exception => {
+                console.error('[-] could get containers from dockerd: ' + exception);
             })
         )
+        .catch(exception => {
+            console.error('[-] could get containers from db: ' + exception);
+        });
 }
 
 module.exports.getContainer = (id) => {
@@ -31,15 +45,21 @@ module.exports.getContainer = (id) => {
     
     return container.inspect()
         .then(_container => {
-        return {
-            id: _container.Id,
-            image: _container.Config.Image,
-            state: _container.State.Status,
-            status: undefined,
-            names: [ _container.Name ],
-            logging: attachedContainers.has(shortId(_container.Id))
-        };
-    });
+            const id = shortId(_container.Id);
+            
+            return {
+                id: id,
+                image: _container.Config.Image,
+                state: _container.State.Status,
+                status: undefined,
+                names: [ _container.Name ],
+                logging: attachedContainers.has(id)
+            };
+        })
+        .catch(exception => {
+            // container was removed, look for it in storage
+            return storage.getContainer(id);
+        });
 };
 
 const processLog = (containerId, source, data, cb) => {
@@ -76,6 +96,15 @@ module.exports.attachToContainer = (id, stdoutCB, stderrCB) => {
         });
 
         attachedContainers.set(shortId(container.id), stream);
+        
+        // add logged container to storage
+        this.getContainer(id)
+        .then(_container => {
+            storage.newLoggedContainer(_container);
+        })
+        .catch(exception => {
+            console.error('[-] could not store to db: ' + exception);
+        });
     });
 }
 
@@ -92,8 +121,7 @@ module.exports.detachFromContainer = (id) => {
 module.exports.getContainerAndLogs = (id) => {
     return this.getContainer(id)
         .then(container => storage.getLogs(id)
-            .then(logs => { 
-                return { container, logs };
-            })
-        );
+            .then(logs => ({ container, logs }))
+        )
+        .catch(exception => console.error('[-] container was not found: ' + id));
 };
