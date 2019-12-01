@@ -25,7 +25,7 @@ sudo docker-compose up --build
 sudo docker-compose down
 ```
 
-# Usage: Main-screen
+# Usage:
 The main screen shows all of the docker containers on your machine that are in states:
 1. Running
 2. Created
@@ -35,9 +35,10 @@ The main screen shows all of the docker containers on your machine that are in s
 6. Dead
 
 To start tracking a container you can click on the checkbox in the 'Logging' column.
+
 To go the a containers log screen you can click on its id or go to: http://localhost:8888/container/[containerID]
 
 If you were tracking a container and the container was removed (by using ```docker container rm [id]``` for example), it would show up as 'removed' and its logs would remain reachable.
 If a container was removed before it was tracked it would not show up on the main screen and would not be reachable.
 
-# Usage: Log-screen
+In the log screen you can go through all of the containers tracked logs and also download them as a .csv file by clicking on the download button next to the 'Log' column.
