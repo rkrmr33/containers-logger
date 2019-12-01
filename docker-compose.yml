@@ -2,10 +2,9 @@ version: "2"
 services:
   app:
     container_name: app
-    build: . # use the Dockerfile in the current directory
     volumes:
-      - ".:/usr/src/app"
       - "/var/run:/var/run"
+    build: . # use the Dockerfile in the current directory
     ports: 
       - "8888:8888"
     depends_on:

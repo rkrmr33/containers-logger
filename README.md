@@ -8,7 +8,7 @@ docker info
 2. start the app server by running inside the cloned directory:
 ```
 cd containers-logger
-docker-compose -d
+sudo docker-compose up -d
 ```
 
 3. open your browser and go to: http://localhost:8888/
@@ -17,5 +17,5 @@ docker-compose -d
 
 5. to stop the application run:
 ```
-docker-compose down
+sudo docker-compose down
 ```
